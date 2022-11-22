@@ -5,35 +5,43 @@ module.exports.getTodo = async (req, res) => {
 	res.send(toDo);
 };
 
+module.exports.getTodoById = async (req, res) => {
+    const toDo = await toDoModel.findById(req.params.id);
+    res.send(toDo);
+};
+
 module.exports.saveTodo = async (req, res) => {
 	const { title, description } = req.body;
-
-	toDoModel.create({ title, description }).then((data) => {
-		console.log("Added successfully");
-		console.log(data);
-
-		res.send(data);
-	});
+	toDoModel
+		.create({ title, description })
+		.then((data) => {
+			res.send(data);
+		})
+		.catch((err) => {
+			console.log(err);
+			res.send(err);
+		});
 };
 
 module.exports.updateTodo = async (req, res) => {
 	const { id, title, description } = req.body;
-	toDoModel.findByIdAndUpdate(id, { title, description })
+	toDoModel
+		.findByIdAndUpdate(id, { title, description })
 		.then(() => {
-			console.log("Updated successfully");
-			res.send();
+			res.send("Updated successfully");
 		})
 		.catch((err) => {
 			console.log(err);
+			res.send(err);
 		});
 };
 
 module.exports.deleteTodo = async (req, res) => {
 	const { id } = req.body;
-	toDoModel.findByIdAndDelete(id)
+	toDoModel
+		.findByIdAndDelete(id)
 		.then(() => {
-			console.log("Deleted successfully");
-			res.send();
+			res.send("Deleted successfully");
 		})
 		.catch((err) => {
 			console.log(err);
